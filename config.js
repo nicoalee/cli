@@ -1,15 +1,23 @@
-
 exports.host = process.env.BLHOST || "brainlife.io";
+exports.ssl = process.env.BLSSL !== "false";
 
 exports.api = {
-    auth: "https://"+exports.host+"/api/auth",
-	amaretti: "https://"+exports.host+"/api/amaretti",
-	warehouse: "https://"+exports.host+"/api/warehouse",
-
-	event_ws: "wss://"+exports.host+"/api/event",
-}
+    auth: (exports.ssl ? "https" : "http") + "://" + exports.host + "/api/auth",
+    amaretti:
+        (exports.ssl ? "https" : "http") +
+        "://" +
+        exports.host +
+        "/api/amaretti",
+    warehouse:
+        (exports.ssl ? "https" : "http") +
+        "://" +
+        exports.host +
+        "/api/warehouse",
+    event_ws:
+        (exports.ssl ? "wss" : "ws") + "://" + exports.host + "/api/event",
+};
 exports.api.wf = exports.api.amaretti; //deprecated .. use api.amaretti
 
 exports.path = {
-    jwt: process.env.HOME+"/.config/" + exports.host + "/.jwt",
-}
+    jwt: process.env.HOME + "/.config/" + exports.host.split(":")[0] + "/.jwt",
+};
